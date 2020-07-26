@@ -376,8 +376,12 @@ void tr_sessionGetDefaultSettings(tr_variant* d)
     tr_variantDictAddInt(d, TR_KEY_rpc_port, atoi(TR_DEFAULT_RPC_PORT_STR));
     tr_variantDictAddStr(d, TR_KEY_rpc_url, TR_DEFAULT_RPC_URL_STR);
     tr_variantDictAddBool(d, TR_KEY_scrape_paused_torrents_enabled, true);
+    
     tr_variantDictAddStr  (d, TR_KEY_script_torrent_added_filename,    "");
     tr_variantDictAddBool (d, TR_KEY_script_torrent_added_enabled,     false);
+    tr_variantDictAddStr  (d, TR_KEY_log_file_started,    "");
+    tr_variantDictAddStr  (d, TR_KEY_log_file_completed,    "");
+    
     tr_variantDictAddStr(d, TR_KEY_script_torrent_done_filename, "");
     tr_variantDictAddBool(d, TR_KEY_script_torrent_done_enabled, false);
     tr_variantDictAddInt(d, TR_KEY_seed_queue_size, 10);
@@ -449,8 +453,13 @@ void tr_sessionGetSettings(tr_session* s, tr_variant* d)
     tr_variantDictAddStr(d, TR_KEY_rpc_whitelist, tr_sessionGetRPCWhitelist(s));
     tr_variantDictAddBool(d, TR_KEY_rpc_whitelist_enabled, tr_sessionGetRPCWhitelistEnabled(s));
     tr_variantDictAddBool(d, TR_KEY_scrape_paused_torrents_enabled, s->scrapePausedTorrents);
+    
     tr_variantDictAddBool (d, TR_KEY_script_torrent_added_enabled,  tr_sessionIsTorrentAddedScriptEnabled (s));
     tr_variantDictAddStr  (d, TR_KEY_script_torrent_added_filename, tr_sessionGetTorrentAddedScript (s));
+    
+    tr_variantDictAddStr  (d, TR_KEY_log_file_started, tr_sessionGetLogFileStartedScript (s));
+    tr_variantDictAddStr  (d, TR_KEY_log_file_completed, tr_sessionGetLogFileCompletedScript (s));
+    
     tr_variantDictAddBool(d, TR_KEY_script_torrent_done_enabled, tr_sessionIsTorrentDoneScriptEnabled(s));
     tr_variantDictAddStr(d, TR_KEY_script_torrent_done_filename, tr_sessionGetTorrentDoneScript(s));
     tr_variantDictAddInt(d, TR_KEY_seed_queue_size, tr_sessionGetQueueSize(s, TR_UP));
