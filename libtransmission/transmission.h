@@ -786,6 +786,8 @@ void tr_sessionSetTorrentAddedScriptEnabled (tr_session *, bool isEnabled);
 const char * tr_sessionGetTorrentAddedScript (const tr_session *);
 void tr_sessionSetTorrentAddedScript (tr_session *, const char * scriptFilename);
 
+const char * tr_sessionGetLogFileStarted (const tr_session *);
+const char * tr_sessionGetLogFileCompleted (const tr_session *);
 
 int tr_blocklistSetContent(tr_session* session, char const* filename);
 

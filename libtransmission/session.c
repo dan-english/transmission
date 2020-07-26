@@ -944,6 +944,18 @@ static void sessionSetImpl(void* vdata)
     {
         tr_sessionSetTorrentAddedScriptEnabled (session, boolVal);
     }
+
+    
+    if (tr_variantDictFindStr (settings, TR_KEY_log_file_started, &str, NULL))
+    {
+        tr_sessionSetLogFileAdded (session, str);
+    }
+    
+    if (tr_variantDictFindStr (settings, TR_KEY_log_file_completed, &str, NULL))
+    {
+        tr_sessionSetLogFileCompleted (session, str);
+    }    
+    
     
     if (tr_variantDictFindStr (settings, TR_KEY_script_torrent_added_filename, &str, NULL))
     {
@@ -2881,6 +2893,16 @@ char const* tr_sessionGetTorrentAddedScript(tr_session const* session)
 
     return session->torrentAddedScript;
 }
+
+
+
+char const* tr_sessionGetLogFileStarted(tr_session const* session)
+{
+    TR_ASSERT(tr_isSession(session));
+
+    return session->torrentAddedScript;
+}
+
 
 void tr_sessionSetTorrentAddedScript(tr_session* session, char const* scriptFilename)
 {

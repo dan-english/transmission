@@ -180,6 +180,8 @@ struct tr_session
 
     char* torrentDoneScript;
     char* torrentAddedScript;
+    char* log_file_started;
+    char* log_file_completed;
     
     char* configDir;
     char* resumeDir;
