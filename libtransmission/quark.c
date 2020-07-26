@@ -185,6 +185,8 @@ static struct tr_key_struct const my_static[] =
     Q("leftUntilDone"),
     Q("length"),
     Q("location"),
+    Q("log_file_started")
+    Q("log_file_completed")
     Q("lpd-enabled"),
     Q("m"),
     Q("magnet-info"),

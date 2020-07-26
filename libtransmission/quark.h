@@ -185,6 +185,8 @@ enum
     TR_KEY_leftUntilDone,
     TR_KEY_length,
     TR_KEY_location,
+    TR_KEY_log_file_started
+    TR_KEY_log_file_completed 
     TR_KEY_lpd_enabled,
     TR_KEY_m,
     TR_KEY_magnet_info,
