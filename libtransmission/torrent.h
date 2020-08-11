@@ -224,6 +224,8 @@ struct tr_torrent
     bool startAfterVerify;
     bool isDirty;
     bool isQueued;
+    bool prefetchMagnetMetadata;
+
 
     bool magnetVerify;
 
