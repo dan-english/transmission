@@ -1152,27 +1152,22 @@ static void torrentInit(tr_torrent* tor, tr_ctor const* ctor)
     if (isNewTorrent)
     {
         tr_logAddInfo ("******************* THIS IS A NEW TORRENT! ***********************");
-    
-        tor->startAfterVerify = doStart;
-        tr_torrentVerify(tor, NULL, NULL);
-        
-        if  (tr_sessionIsTorrentAddedScriptEnabled(tor->session))
+        if (!tr_torrentHasMetadata(tor) && !doStart)
         {
-            tr_logAddInfo ("******************* CALLING TORRENT ADDED SCRIPT ***********************");
-            torrentCallScript(tor, tr_sessionGetTorrentAddedScript(tor->session));
+            tor->prefetchMagnetMetadata = true;
+            tr_torrentStartNow(tor);
         }
-        
+        else
+        {
+            tor->startAfterVerify = doStart;
+            tr_torrentVerify(tor, NULL, NULL);
+        }        
         
         
     }
     else if (doStart)
     {
         tr_torrentStart(tor);
-        if (tr_sessionIsTorrentAddedScriptEnabled (tor->session))
-        {
-        
-                    torrentCallScript(tor, tr_sessionGetTorrentAddedScript(tor->session));
-        }
     }
 
     tr_sessionUnlock(session);
@@ -2167,6 +2162,7 @@ void tr_torrentStop(tr_torrent* tor)
 
         tor->isRunning = false;
         tor->isStopping = false;
+        tor->prefetchMagnetMetadata = false;
         tr_torrentSetDirty(tor);
         tr_runInEventThread(tor->session, stopTorrent, tor);
 
