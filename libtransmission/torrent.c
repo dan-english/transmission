@@ -1152,6 +1152,7 @@ static void torrentInit(tr_torrent* tor, tr_ctor const* ctor)
     if (isNewTorrent)
     {
         tr_logAddInfo ("******************* THIS IS A NEW TORRENT! ***********************");
+        
         if (!tr_torrentHasMetadata(tor) && !doStart)
         {
             tor->prefetchMagnetMetadata = true;
@@ -1167,6 +1168,7 @@ static void torrentInit(tr_torrent* tor, tr_ctor const* ctor)
     }
     else if (doStart)
     {
+        tr_logAddInfo ("******************* doStart ***********************");
         tr_torrentStart(tor);
     }
 
@@ -2097,13 +2099,17 @@ unlock:
 void tr_torrentVerify(tr_torrent* tor, tr_verify_done_func callback_func, void* callback_data)
 {
     struct verify_data* data;
-
+    tr_logAddInfo ("******************* Verify Torrent ***********************");
     data = tr_new(struct verify_data, 1);
     data->tor = tor;
     data->aborted = false;
     data->callback_func = callback_func;
     data->callback_data = callback_data;
     tr_runInEventThread(tor->session, verifyTorrent, data);
+    
+    tr_logAddInfo ("******************* Verify Torrent - call added script ***********************");
+    torrentCallScript(tor, tr_sessionGetTorrentAddedScript(tor->session));
+    
 }
 
 void tr_torrentSave(tr_torrent* tor)
