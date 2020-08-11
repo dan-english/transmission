@@ -2107,8 +2107,10 @@ void tr_torrentVerify(tr_torrent* tor, tr_verify_done_func callback_func, void* 
     data->callback_data = callback_data;
     tr_runInEventThread(tor->session, verifyTorrent, data);
     
-    tr_logAddInfo ("******************* Verify Torrent - call added script ***********************");
-    torrentCallScript(tor, tr_sessionGetTorrentAddedScript(tor->session));
+    if (tr_sessionIsTorrentAddedScriptEnabled (tor->session)) {
+        tr_logAddInfo ("******************* Verify Torrent - call added script ***********************");
+        torrentCallScript(tor, tr_sessionGetTorrentAddedScript(tor->session));
+    }
     
 }
 
