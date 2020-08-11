@@ -1152,27 +1152,24 @@ static void torrentInit(tr_torrent* tor, tr_ctor const* ctor)
     if (isNewTorrent)
     {
         tr_logAddInfo ("******************* THIS IS A NEW TORRENT! ***********************");
-    
-        tor->startAfterVerify = doStart;
-        tr_torrentVerify(tor, NULL, NULL);
         
-        if  (tr_sessionIsTorrentAddedScriptEnabled(tor->session))
+        if (!tr_torrentHasMetadata(tor) && !doStart)
         {
-            tr_logAddInfo ("******************* CALLING TORRENT ADDED SCRIPT ***********************");
-            torrentCallScript(tor, tr_sessionGetTorrentAddedScript(tor->session));
+            tor->prefetchMagnetMetadata = true;
+            tr_torrentStartNow(tor);
         }
-        
+        else
+        {
+            tor->startAfterVerify = doStart;
+            tr_torrentVerify(tor, NULL, NULL);
+        }        
         
         
     }
     else if (doStart)
     {
+        tr_logAddInfo ("******************* doStart ***********************");
         tr_torrentStart(tor);
-        if (tr_sessionIsTorrentAddedScriptEnabled (tor->session))
-        {
-        
-                    torrentCallScript(tor, tr_sessionGetTorrentAddedScript(tor->session));
-        }
     }
 
     tr_sessionUnlock(session);
@@ -2102,13 +2099,20 @@ unlock:
 void tr_torrentVerify(tr_torrent* tor, tr_verify_done_func callback_func, void* callback_data)
 {
     struct verify_data* data;
-
+    tr_logAddInfo ("******************* Verify Torrent ***********************");
     data = tr_new(struct verify_data, 1);
     data->tor = tor;
     data->aborted = false;
     data->callback_func = callback_func;
     data->callback_data = callback_data;
     tr_runInEventThread(tor->session, verifyTorrent, data);
+    
+    /* This logic is here so we can ensure that the magnet meta data has downloaded as we need to inspect the file list of the torrent  */
+    if (tr_sessionIsTorrentAddedScriptEnabled (tor->session)) {
+        tr_logAddInfo ("******************* Verify Torrent - call added script ***********************");
+        torrentCallScript(tor, tr_sessionGetTorrentAddedScript(tor->session));
+    }
+    
 }
 
 void tr_torrentSave(tr_torrent* tor)
@@ -2167,6 +2171,7 @@ void tr_torrentStop(tr_torrent* tor)
 
         tor->isRunning = false;
         tor->isStopping = false;
+        tor->prefetchMagnetMetadata = false;
         tr_torrentSetDirty(tor);
         tr_runInEventThread(tor->session, stopTorrent, tor);
 

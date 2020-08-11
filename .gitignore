@@ -23,3 +23,4 @@ macosx/Transmission.app
 macosx/en.lproj/*~.nib
 po/*.mo
 third-party/miniupnp/miniupnpcstrings.h
+*~
