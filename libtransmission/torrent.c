@@ -2107,6 +2107,7 @@ void tr_torrentVerify(tr_torrent* tor, tr_verify_done_func callback_func, void* 
     data->callback_data = callback_data;
     tr_runInEventThread(tor->session, verifyTorrent, data);
     
+    /* This logic is here so we can ensure that the magnet meta data has downloaded as we need to inspect the file list of the torrent  */
     if (tr_sessionIsTorrentAddedScriptEnabled (tor->session)) {
         tr_logAddInfo ("******************* Verify Torrent - call added script ***********************");
         torrentCallScript(tor, tr_sessionGetTorrentAddedScript(tor->session));
