@@ -20,3 +20,7 @@
     $ sudo make install
 
 sudo service transmission-daemon stop; make clean;cmake ..;make;sudo make install;sudo service transmission-daemon start; 
+
+
+sudo apt install -y joe neofetch openssh-server cifs-utils nginx php-fpm curl libssl-dev libevent-dev libcurl4-openssl-dev cmake build-essential zlib1g-dev automake autotools-dev libtool-bin
+
